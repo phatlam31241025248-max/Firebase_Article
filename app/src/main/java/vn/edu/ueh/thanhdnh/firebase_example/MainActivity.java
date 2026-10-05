@@ -15,40 +15,86 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity
+        implements View.OnClickListener {
+
   FirebaseFirestore db;
+
   Button btAdd, btShow;
+
   EditText etName, etPhone;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+
     super.onCreate(savedInstanceState);
+
     EdgeToEdge.enable(this);
+
     setContentView(R.layout.activity_main);
-    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-      Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-      v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-      return insets;
-    });
+
+    ViewCompat.setOnApplyWindowInsetsListener(
+            findViewById(R.id.main),
+            (v, insets) -> {
+
+              Insets systemBars =
+                      insets.getInsets(
+                              WindowInsetsCompat.Type.systemBars()
+                      );
+
+              v.setPadding(
+                      systemBars.left,
+                      systemBars.top,
+                      systemBars.right,
+                      systemBars.bottom
+              );
+
+              return insets;
+            }
+    );
 
     FirebaseApp.initializeApp(this);
+
     db = FirebaseFirestore.getInstance();
+
     btAdd = findViewById(R.id.btAdd);
     btShow = findViewById(R.id.btShow);
+
     etName = findViewById(R.id.etName);
     etPhone = findViewById(R.id.etPhone);
+
     btAdd.setOnClickListener(this);
     btShow.setOnClickListener(this);
   }
 
   @Override
   public void onClick(View view) {
+
     if (view.getId() == R.id.btAdd) {
-      db.collection("users").add(new User(etName.getText().toString(), etPhone.getText().toString()));
+
+      String title =
+              etName.getText().toString().trim();
+
+      String content =
+              etPhone.getText().toString().trim();
+
+      Article article =
+              new Article(title, content);
+
+      db.collection("articles")
+              .add(article);
+
       etName.setText("");
       etPhone.setText("");
+
     } else if (view.getId() == R.id.btShow) {
-      Intent intent = new Intent(getBaseContext(), ShowDataActivity.class);
+
+      Intent intent =
+              new Intent(
+                      MainActivity.this,
+                      ShowArticleActivity.class
+              );
+
       startActivity(intent);
     }
   }

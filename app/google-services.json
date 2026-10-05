@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "929904416727",
+    "project_id": "fir-article-dbcf8",
+    "storage_bucket": "fir-article-dbcf8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929904416727:android:5b581e3e25264a4f82dd92",
+        "android_client_info": {
+          "package_name": "vn.edu.ueh.thanhdnh.firebase_example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmSj9H1TbtFc-DNcQMvBOlHq6md7NqQwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
