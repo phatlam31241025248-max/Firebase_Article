@@ -1,75 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:padding="25dp">
 
-  <TextView
-      android:id="@+id/textView"
-      android:layout_width="wrap_content"
+  <!-- Cột nhập dữ liệu -->
+  <LinearLayout
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:text="Title"
-      android:textSize="16sp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      android:layout_marginStart="100dp"
-      android:layout_marginTop="80dp" />
+      android:layout_weight="1"
+      android:orientation="vertical"
+      android:padding="10dp">
 
-  <EditText
-      android:id="@+id/etName"
-      android:layout_width="380dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <TextView
+          android:layout_width="70dp"
+          android:layout_height="wrap_content"
+          android:text="Title"
+          android:textSize="16sp" />
+
+      <EditText
+          android:id="@+id/etName"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:hint="Nhập title"
+          android:singleLine="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp">
+
+      <TextView
+          android:layout_width="70dp"
+          android:layout_height="wrap_content"
+          android:text="Content"
+          android:textSize="16sp" />
+
+      <EditText
+          android:id="@+id/etPhone"
+          android:layout_width="0dp"
+          android:layout_height="100dp"
+          android:layout_weight="1"
+          android:hint="Nhập content"
+          android:gravity="top"
+          android:inputType="textMultiLine" />
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+
+  <!-- Cột button -->
+  <LinearLayout
+      android:layout_width="180dp"
       android:layout_height="wrap_content"
-      android:inputType="text"
-      app:layout_constraintStart_toEndOf="@id/textView"
-      app:layout_constraintTop_toTopOf="@id/textView"
-      android:layout_marginStart="24dp" />
+      android:orientation="vertical"
+      android:padding="10dp">
 
-  <TextView
-      android:id="@+id/textView3"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Content"
-      android:textSize="16sp"
-      app:layout_constraintStart_toStartOf="@id/textView"
-      app:layout_constraintTop_toTopOf="@id/etPhone"
-      android:layout_marginTop="4dp" />
+    <Button
+        android:id="@+id/btAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Article" />
 
-  <EditText
-      android:id="@+id/etPhone"
-      android:layout_width="380dp"
-      android:layout_height="wrap_content"
-      android:inputType="textMultiLine"
-      android:minLines="1"
-      android:maxLines="3"
-      app:layout_constraintStart_toEndOf="@id/textView3"
-      app:layout_constraintTop_toBottomOf="@id/etName"
-      android:layout_marginStart="24dp"
-      android:layout_marginTop="28dp" />
+    <Button
+        android:id="@+id/btShow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Articles"
+        android:layout_marginTop="10dp" />
 
-  <Button
-      android:id="@+id/btAdd"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Add Article"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toStartOf="@id/btShow"
-      app:layout_constraintTop_toBottomOf="@id/etPhone"
-      android:layout_marginTop="50dp"
-      android:layout_marginEnd="12dp" />
+  </LinearLayout>
 
-  <Button
-      android:id="@+id/btShow"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Show Articles"
-      app:layout_constraintStart_toEndOf="@id/btAdd"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@id/btAdd"
-      android:layout_marginStart="12dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

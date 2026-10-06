@@ -1,13 +1,10 @@
 package vn.edu.ueh.thanhdnh.firebase_example;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,111 +12,138 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class ShowArticleActivity extends AppCompatActivity {
+public class ShowArticleActivity
+        extends AppCompatActivity {
 
     FirebaseFirestore db;
 
     RecyclerView recyclerView;
 
-    List<Article> articles = new ArrayList<>();
+    List<Article> articles =
+            new ArrayList<>();
+
+    ArticleViewAdapter adapter;
+
+    // Listener theo dõi Firebase
+    private ListenerRegistration listenerRegistration;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(
+            Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
-
-        setContentView(R.layout.activity_show_data);
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-                findViewById(R.id.main),
-                (v, insets) -> {
-
-                    Insets systemBars =
-                            insets.getInsets(
-                                    WindowInsetsCompat.Type.systemBars()
-                            );
-
-                    v.setPadding(
-                            systemBars.left,
-                            systemBars.top,
-                            systemBars.right,
-                            systemBars.bottom
-                    );
-
-                    return insets;
-                }
+        setContentView(
+                R.layout.activity_show_data
         );
 
         FirebaseApp.initializeApp(this);
 
-        recyclerView =
-                findViewById(R.id.reclyclerview);
+        db =
+                FirebaseFirestore.getInstance();
 
-        ArticleViewAdapter adapter =
+        recyclerView =
+                findViewById(
+                        R.id.reclyclerview
+                );
+
+        adapter =
                 new ArticleViewAdapter(
-                        getBaseContext(),
+                        this,
                         articles
                 );
 
         recyclerView.setLayoutManager(
-                new LinearLayoutManager(getBaseContext())
+                new LinearLayoutManager(this)
         );
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(
+                adapter
+        );
 
-        db = FirebaseFirestore.getInstance();
+        loadArticlesRealtime();
+    }
 
-        db.collection("articles")
-                .get()
-                .addOnCompleteListener(
-                        new OnCompleteListener<QuerySnapshot>() {
+    private void loadArticlesRealtime() {
 
-                            @Override
-                            public void onComplete(
-                                    @NonNull Task<QuerySnapshot> task) {
+        listenerRegistration =
+                db.collection("articles")
+                        .addSnapshotListener(
+                                (value, error) -> {
 
-                                if (task.isSuccessful()) {
+                                    if (error != null) {
 
+                                        Toast.makeText(
+                                                ShowArticleActivity.this,
+                                                "Lỗi: "
+                                                        + error.getMessage(),
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+
+                                        return;
+                                    }
+
+                                    if (value == null) {
+                                        return;
+                                    }
+
+                                    // Xóa danh sách cũ
                                     articles.clear();
 
+                                    // Lấy dữ liệu mới từ Firebase
                                     for (
-                                            QueryDocumentSnapshot q
-                                            : task.getResult()
+                                            QueryDocumentSnapshot document
+                                            : value
                                     ) {
 
-                                        Map<String, Object> data =
-                                                q.getData();
-
                                         String title =
-                                                (String) data.get("title");
+                                                document.getString(
+                                                        "title"
+                                                );
 
                                         String content =
-                                                (String) data.get("content");
+                                                document.getString(
+                                                        "content"
+                                                );
 
                                         Article article =
                                                 new Article(
+                                                        document.getId(),
                                                         title,
                                                         content
                                                 );
 
-                                        articles.add(article);
+                                        articles.add(
+                                                article
+                                        );
                                     }
 
-                                    adapter.update(articles);
+                                    // Cập nhật Adapter
+                                    adapter.update(
+                                            articles
+                                    );
 
                                     adapter.notifyDataSetChanged();
                                 }
-                            }
-                        }
-                );
+                        );
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+        // Hủy listener khi Activity bị đóng
+        if (listenerRegistration != null) {
+
+            listenerRegistration.remove();
+
+            listenerRegistration = null;
+        }
     }
 }

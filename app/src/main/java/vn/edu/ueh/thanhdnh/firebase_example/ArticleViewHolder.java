@@ -1,43 +1,39 @@
 package vn.edu.ueh.thanhdnh.firebase_example;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ArticleViewHolder extends RecyclerView.ViewHolder {
+public class ArticleViewHolder
+        extends RecyclerView.ViewHolder {
 
+  private ImageView imgArticle;
   private TextView txtTitle;
-  private TextView txtContent;
-
-  private ArticleViewAdapter adapter;
 
   public ArticleViewHolder(
-          @NonNull View itemView,
-          ArticleViewAdapter adapter) {
+          @NonNull View itemView) {
 
     super(itemView);
 
-    txtTitle = itemView.findViewById(R.id.txt_title);
-    txtContent = itemView.findViewById(R.id.txt_content);
+    imgArticle =
+            itemView.findViewById(
+                    R.id.img_article
+            );
 
-    this.adapter = adapter;
+    txtTitle =
+            itemView.findViewById(
+                    R.id.txt_title
+            );
+  }
+
+  public ImageView getImgArticle() {
+    return imgArticle;
   }
 
   public TextView getTxtTitle() {
     return txtTitle;
-  }
-
-  public void setTxtTitle(TextView txtTitle) {
-    this.txtTitle = txtTitle;
-  }
-
-  public TextView getTxtContent() {
-    return txtContent;
-  }
-
-  public void setTxtContent(TextView txtContent) {
-    this.txtContent = txtContent;
   }
 }
